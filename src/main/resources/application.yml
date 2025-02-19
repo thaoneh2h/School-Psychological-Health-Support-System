@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;databaseName=base_api;encrypt=false;trustServerCertificate=true
+    username:
+    password:
+    hikari:
+      maximum-pool-size: 100
+      leak-detection-threshold: 30000 # 30 seconds
+      connection-test-query: SELECT 1
+      max-lifetime: 600000 # 10 minutes
+  redis:
+    host: localhost
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 1
+        max-idle: 50
+        max-active: 50
+  data:
+    redis:
+      repositories:
+        enabled: false
+  mail:
+    host: email-smtp.us-west-2.amazonaws.com
+    username:
+    password:
+    properties:
+      mail.smtp.starttls.enable: true
+    port: 25
+  jackson:
+    date-format: yyyy/MM/dd HH:mm
+    time-zone: Asia/Ho_Chi_Minh
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  jpa:
+    show-sql: false
+    hibernate:
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        jdbc:
+          batch_size: 2000
+        order_inserts: true
+        order_update: true
+    open-in-view: false
+  servlet:
+    multipart:
+      max-request-size: 200MB
+      max-file-size: 200MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 900 # 15 minutes
+    context-path: /api
+  forward-headers-strategy: framework
+email:
+  is-on-send-mail: false
+  receiver:
+log-util:
+  min-stat: 300
+iosTypePush: APNS
