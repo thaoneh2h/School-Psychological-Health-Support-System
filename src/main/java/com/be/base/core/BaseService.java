@@ -100,7 +100,7 @@ public abstract class BaseService<E extends BaseEntity, R extends BaseRepository
         Map<Long, String> mapNameUserById = userRepository
                 .findAllByIdIn(listUserId)
                 .stream()
-                .collect(Collectors.toMap(UserEntity::getId, UserEntity::getName));
+                .collect(Collectors.toMap(UserEntity::getUserId, UserEntity::getFullName));
         page.forEach(e -> {
                     e.setCreator(mapNameUserById.getOrDefault(e.getCreatedBy(), Constants.EMPTY_STRING));
                     e.setUpdater(mapNameUserById.getOrDefault(e.getUpdatedBy(), Constants.EMPTY_STRING));

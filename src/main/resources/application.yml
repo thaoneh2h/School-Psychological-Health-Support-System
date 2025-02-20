@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    url: jdbc:sqlserver://localhost:1433;databaseName=base_api;encrypt=false;trustServerCertificate=true
-    username:
-    password:
+    url: jdbc:sqlserver://localhost:1433;databaseName=SchoolPsychHealthSupport;encrypt=false;trustServerCertificate=true
+    username: sa
+    password: sa
     hikari:
       maximum-pool-size: 100
       leak-detection-threshold: 30000 # 30 seconds
