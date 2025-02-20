@@ -12,7 +12,6 @@ import javax.persistence.Enumerated;
 public class SaveUserDto {
 
     private Long id;
-    private String username;
     private String name;
     private String password;
 

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "ProgramRegistrations")
@@ -32,7 +33,7 @@ public class ProgramRegistrationEntity extends BaseEntity {
     private String status;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private Date updatedAt = new Date();
 
     @Column(nullable = false)
     private Boolean isDeleted = false;

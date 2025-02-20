@@ -29,6 +29,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
     private final BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
 
     public Optional<UserEntity> validateUser(String email, String password) {
         Optional<UserEntity> userOpt = repository.findByEmailAndIsDeletedFalse(email);
@@ -63,7 +64,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         }
         try {
             UserEntity userEntity = userToSaveOpt.get();
-            save(userEntity);
+            userRepository.save(userEntity);
             return ServerResponse.SUCCESS;
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("exception when save user: {}", e.getMessage());
@@ -72,7 +73,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     public Optional<UserEntity> fromSaveDto(SaveUserDto saveUserDto) {
-        String username = saveUserDto.getUsername();
+        String username = saveUserDto.getEmail();
         if (StringUtils.isEmpty(username)) {
             LOGGER.info("username must not be null");
             return Optional.empty();
@@ -100,7 +101,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     public ServerResponse getDetailUser(Long userId) {
-        Optional<UserEntity> userEntityOpt = repository.findByIdAndIsDeletedFalse(userId);
+        Optional<UserEntity> userEntityOpt = userRepository.findByIdAndIsDeletedFalse(userId);
         if (userEntityOpt.isEmpty()) {
             return ServerResponse.ERROR;
         }
@@ -123,7 +124,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         UserEntity user = userOpt.get();
         user.setDeleted(true);
         user.setEmail(null);
-        user.setUpdatedTime(new Date());
+        user.setUpdatedAt(new Date());
         repository.save(user);
         return ServerResponse.SUCCESS;
     }
@@ -135,7 +136,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         }
         UserEntity user = userOpt.get();
         user.setPasswordHash(passwordEncoder.encode(user.getEmail()));
-        user.setUpdatedTime(new Date());
+        user.setUpdatedAt(new Date());
         repository.save(user);
         return ServerResponse.SUCCESS;
     }
@@ -147,7 +148,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         }
         UserEntity user = userOpt.get();
         user.setIsDeleted(!user.isDeleted());
-        user.setUpdatedTime(new Date());
+        user.setUpdatedAt(new Date());
         repository.save(user);
         return ServerResponse.SUCCESS;
     }
@@ -157,7 +158,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     public boolean isUsernameExist(Long oldCompanyAdminId, String username) {
-        UserEntity userEntity = repository.findByUsername(username);
+        UserEntity userEntity = repository.findByEmail(username);
         return userEntity != null && !userEntity.getId().equals(oldCompanyAdminId);
     }
 

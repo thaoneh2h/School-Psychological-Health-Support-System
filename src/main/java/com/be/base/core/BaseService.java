@@ -47,9 +47,9 @@ public abstract class BaseService<E extends BaseEntity, R extends BaseRepository
          */
 
         if (entity.getId() == null) {
-            entity.setCreatedTime(new Date());
+            entity.setCreatedAt(new Date());
         }
-        entity.setUpdatedTime(new Date());
+        entity.setUpdatedAt(new Date());
     }
 
     /**
@@ -72,20 +72,8 @@ public abstract class BaseService<E extends BaseEntity, R extends BaseRepository
         if (entity == null || entity.getId() == null) {
             return null;
         } else {
-            entity.setUpdatedTime(new Date());
+            entity.setUpdatedAt(new Date());
             return (E) repository.save(entity);
         }
     }
-
-
-    /**
-     * Get findAll
-     *
-     * @param page
-     * @return
-     */
-    public Page<E> findAll(Pageable page, boolean isDeleted) {
-        return repository.findByIsDeleted(page, isDeleted);
-    }
-
 }

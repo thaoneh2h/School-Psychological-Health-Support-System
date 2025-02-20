@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 import java.util.Date;
@@ -20,10 +21,10 @@ import java.util.Date;
 public abstract class BaseEntity {
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    protected Date createdTime;
+    protected Date createdAt;
 
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-    protected Date updatedTime;
+    protected Date updatedAt;
 
     @Transient
     protected String creator;

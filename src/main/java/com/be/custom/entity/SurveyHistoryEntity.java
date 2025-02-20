@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "SurveyHistory")
@@ -31,7 +32,7 @@ public class SurveyHistoryEntity extends BaseEntity {
     private LocalDateTime completedAt;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 
     @Override
     public Long getId() {

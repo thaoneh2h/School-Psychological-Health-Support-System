@@ -55,7 +55,7 @@ public class HeaderAuthenticationFilter implements Filter {
             }
             TokenDto tokenDto = tokenOpt.get();
             Long userId = tokenDto.getUserId();
-            Optional<UserEntity> userOpt = userRepository.findByUserIdAndIsDeletedFalse(userId);
+            Optional<UserEntity> userOpt = userRepository.findByIdAndIsDeletedFalse(userId);
             if (userOpt.isEmpty()) {
                 log.info("web admin is invalid with id {}", userId);
                 response.setStatus(CODE_TOKEN_INVALID);

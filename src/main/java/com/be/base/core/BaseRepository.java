@@ -10,8 +10,4 @@ import java.util.Optional;
 
 @NoRepositoryBean
 public interface BaseRepository<E> extends PagingAndSortingRepository<E, Long>, JpaRepository<E, Long> {
-
-    Page<E> findByIsDeleted(Pageable page, boolean isDeleted);
-
-    Optional<E> findByIdAndIsDeletedFalse(Long id);
 }

@@ -15,7 +15,7 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 
     Optional<UserEntity> findByEmailAndIsDeletedFalse(String email);
 
-    Optional<UserEntity> findByUserIdAndIsDeletedFalse(Long id);
+    Optional<UserEntity> findByIdAndIsDeletedFalse(Long id);
 
     @Query(value = "select u from UserEntity u " +
             "where u.isDeleted = false " +
@@ -23,8 +23,8 @@ public interface UserRepository extends BaseRepository<UserEntity> {
             "and (u.role in ?2) ")
     Page<UserEntity> getPageAdmin(String keyword, List<Role> listRoleFilter, Pageable pageable);
 
-    List<UserEntity> findAllByUserIdIn(Collection<Long> ids);
+    List<UserEntity> findAllByIdIn(Collection<Long> ids);
 
-    UserEntity findByUsername(String username);
+    UserEntity findByEmail(String username);
 
 }

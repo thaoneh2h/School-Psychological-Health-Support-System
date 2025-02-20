@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Resources")
@@ -33,7 +34,7 @@ public class ResourceEntity extends BaseEntity {
     private LocalDateTime uploadedAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private Date updatedAt = new Date();
 
     @Override
     public Long getId() {

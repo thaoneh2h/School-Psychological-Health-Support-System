@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "BlogPosts")
@@ -28,10 +29,10 @@ public class BlogPostEntity extends BaseEntity {
     private UserEntity author;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Date createdAt = new Date();
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private Date updatedAt = new Date();
 
     @Column(nullable = false)
     private Boolean isDeleted = false;

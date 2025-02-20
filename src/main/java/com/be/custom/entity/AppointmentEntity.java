@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Appointments")
@@ -45,7 +46,7 @@ public class AppointmentEntity extends BaseEntity {
     private String notes;
 
     @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Date createdAt = new Date();
 
     @ManyToOne
     @JoinColumn(name = "CreatedBy", nullable = false)
@@ -56,7 +57,7 @@ public class AppointmentEntity extends BaseEntity {
     private UserEntity updatedBy;
 
     @Column(nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private Date updatedAt = new Date();
 
     @Column(nullable = false)
     private Boolean isDeleted = false;

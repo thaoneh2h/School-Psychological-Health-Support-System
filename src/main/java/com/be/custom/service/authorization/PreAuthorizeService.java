@@ -28,8 +28,7 @@ public class PreAuthorizeService {
         if (userDetails == null) {
             return false;
         }
-        return Role.SYSTEM_ADMIN == userDetails.getRole()
-                || Role.COMPANY_ADMIN == userDetails.getRole();
+        return Role.SYSTEM_ADMIN == userDetails.getRole();
     }
 
     public boolean isCompanyStaff() {

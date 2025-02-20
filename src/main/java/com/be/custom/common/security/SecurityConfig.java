@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers(IGNORE_PATHS).permitAll()
                 .antMatchers("/question/get-question").permitAll()
-                .antMatchers("/answer/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
                 .antMatchers("/swagger-ui.html").hasRole("SYSTEM_ADMIN")
                 .anyRequest().permitAll();
         http.formLogin()

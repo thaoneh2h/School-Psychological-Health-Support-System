@@ -38,7 +38,7 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(UserEntity user,  String accessToken) {
         this.accessToken = accessToken;
-        this.userId = user.getUserId();
+        this.userId = user.getId();
         this.username = user.getEmail();
         this.name = user.getFullName();
         this.role = user.getRole();

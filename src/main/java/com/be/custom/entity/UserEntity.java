@@ -19,7 +19,7 @@ public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     @Column(nullable = false)
     private String fullName;
@@ -35,8 +35,7 @@ public class UserEntity extends BaseEntity {
     private Role role;
 
     private LocalDate dateOfBirth;
-
-    @Column(nullable = false)
+    
     private String gender;
 
     private String phoneNumber;
@@ -86,6 +85,6 @@ public class UserEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return userId;
+        return id;
     }
 }
