@@ -16,7 +16,7 @@ public class AppointmentEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long appointmentId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "StudentID", nullable = false)
@@ -64,6 +64,6 @@ public class AppointmentEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return appointmentId;
+        return id;
     }
 }

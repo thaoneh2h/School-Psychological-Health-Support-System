@@ -16,7 +16,7 @@ public class ResourceEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long resourceId;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -38,6 +38,6 @@ public class ResourceEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return resourceId;
+        return id;
     }
 }

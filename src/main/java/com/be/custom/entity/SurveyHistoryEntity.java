@@ -16,7 +16,7 @@ public class SurveyHistoryEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long historyId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "UserID", nullable = false)
@@ -36,6 +36,6 @@ public class SurveyHistoryEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return historyId;
+        return id;
     }
 }

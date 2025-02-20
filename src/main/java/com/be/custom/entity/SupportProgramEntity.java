@@ -17,7 +17,7 @@ public class SupportProgramEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long programId;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -43,6 +43,6 @@ public class SupportProgramEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return programId;
+        return id;
     }
 }

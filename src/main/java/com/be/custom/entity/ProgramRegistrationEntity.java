@@ -16,7 +16,7 @@ public class ProgramRegistrationEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long registrationId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "UserID", nullable = false)
@@ -40,6 +40,6 @@ public class ProgramRegistrationEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return registrationId;
+        return id;
     }
 }

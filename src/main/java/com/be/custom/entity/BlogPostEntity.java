@@ -16,7 +16,7 @@ public class BlogPostEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -39,6 +39,6 @@ public class BlogPostEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return postId;
+        return id;
     }
 }

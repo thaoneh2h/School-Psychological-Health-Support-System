@@ -14,7 +14,7 @@ public class ParentChildEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long parentChildId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "ParentID", nullable = false)
@@ -29,6 +29,6 @@ public class ParentChildEntity extends BaseEntity {
 
     @Override
     public Long getId() {
-        return parentChildId;
+        return id;
     }
 }
