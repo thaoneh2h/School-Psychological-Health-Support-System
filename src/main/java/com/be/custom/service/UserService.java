@@ -43,18 +43,18 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         }
     }
 
-    public Page<UserEntity> getPageAdmin(String keyword, Role roleFilter, Pageable pageable) {
-        List<Role> listRoleFilter;
-        if (roleFilter == null) {
-            listRoleFilter = List.of(Role.COMPANY_ADMIN, Role.COMPANY_STAFF);
-        } else if (Role.COMPANY_ADMIN == roleFilter) {
-            listRoleFilter = List.of(Role.COMPANY_ADMIN);
-        } else {
-            listRoleFilter = List.of(Role.COMPANY_STAFF);
-        }
-
-        return repository.getPageAdmin(keyword, listRoleFilter, pageable);
-    }
+//    public Page<UserEntity> getPageAdmin(String keyword, Role roleFilter, Pageable pageable) {
+//        List<Role> listRoleFilter;
+//        if (roleFilter == null) {
+//            listRoleFilter = List.of(Role.COMPANY_ADMIN, Role.COMPANY_STAFF);
+//        } else if (Role.COMPANY_ADMIN == roleFilter) {
+//            listRoleFilter = List.of(Role.COMPANY_ADMIN);
+//        } else {
+//            listRoleFilter = List.of(Role.COMPANY_STAFF);
+//        }
+//
+//        return repository.getPageAdmin(keyword, listRoleFilter, pageable);
+//    }
 
     public ServerResponse saveUser(SaveUserDto saveUserDto) {
         Optional<UserEntity> userToSaveOpt = fromSaveDto(saveUserDto);
@@ -71,7 +71,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         }
     }
 
-    private Optional<UserEntity> fromSaveDto(SaveUserDto saveUserDto) {
+    public Optional<UserEntity> fromSaveDto(SaveUserDto saveUserDto) {
         String username = saveUserDto.getUsername();
         if (StringUtils.isEmpty(username)) {
             LOGGER.info("username must not be null");
@@ -80,7 +80,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         UserEntity userToSave;
         boolean isUpdate = saveUserDto.getId() != null;
         if (isUpdate) {
-            Optional<UserEntity> userToSaveOpt = findAdminById(saveUserDto.getId());
+            Optional<UserEntity> userToSaveOpt = findUserById(saveUserDto.getId());
             if (userToSaveOpt.isEmpty()) {
                 return Optional.empty();
             }
@@ -95,7 +95,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         userToSave.setEmail(username);
         userToSave.setEmail(saveUserDto.getEmail());
         userToSave.setPhoneNumber(saveUserDto.getPhone());
-        userToSave.setRole(saveUserDto.getRole());
+        userToSave.setRole(saveUserDto.getRole() == null ? Role.STUDENT : saveUserDto.getRole());
         return Optional.of(userToSave);
     }
 
@@ -116,7 +116,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     public ServerResponse delete(Long userId) {
-        Optional<UserEntity> userOpt = findAdminById(userId);
+        Optional<UserEntity> userOpt = findUserById(userId);
         if (userOpt.isEmpty()) {
             return ServerResponse.ERROR;
         }
@@ -129,7 +129,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     public ServerResponse resetPassword(Long userId) {
-        Optional<UserEntity> userOpt = findAdminById(userId);
+        Optional<UserEntity> userOpt = findUserById(userId);
         if (userOpt.isEmpty()) {
             return ServerResponse.ERROR;
         }
@@ -141,7 +141,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
     }
 
     public ServerResponse changeStatus(Long userId) {
-        Optional<UserEntity> userOpt = findAdminById(userId);
+        Optional<UserEntity> userOpt = findUserById(userId);
         if (userOpt.isEmpty()) {
             return ServerResponse.ERROR;
         }
@@ -152,17 +152,8 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         return ServerResponse.SUCCESS;
     }
 
-    private Optional<UserEntity> findAdminById(Long id) {
-        Optional<UserEntity> userOpt = repository.findByIdAndIsDeletedFalse(id);
-        if (userOpt.isEmpty()) {
-            return Optional.empty();
-        }
-        UserEntity user = userOpt.get();
-        if (Role.SYSTEM_ADMIN == user.getRole()) {
-            log.error("cannot get info of system admin account");
-            return Optional.empty();
-        }
-        return userOpt;
+    private Optional<UserEntity> findUserById(Long id) {
+        return repository.findByIdAndIsDeletedFalse(id);
     }
 
     public boolean isUsernameExist(Long oldCompanyAdminId, String username) {
