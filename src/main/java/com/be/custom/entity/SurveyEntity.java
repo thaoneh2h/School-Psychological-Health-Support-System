@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Table(name = "Surveys")
 @Getter
 @Setter
-public class SurveyEntity {
+public class SurveyEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +36,8 @@ public class SurveyEntity {
     @OneToMany(mappedBy = "survey")
     private List<SurveyQuestionEntity> questions;
 
+    @Override
+    public Long getId() {
+        return surveyId;
+    }
 }

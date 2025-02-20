@@ -1,6 +1,6 @@
 package com.be.base.core;
 
-import com.be.custom.entity.user.UserEntity;
+import com.be.custom.entity.UserEntity;
 import com.be.custom.repository.UserRepository;
 import com.be.custom.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,26 +86,6 @@ public abstract class BaseService<E extends BaseEntity, R extends BaseRepository
      */
     public Page<E> findAll(Pageable page, boolean isDeleted) {
         return repository.findByIsDeleted(page, isDeleted);
-    }
-
-    public void setCreatorAndUpdater(Page<E> page) {
-        if (page.isEmpty()) {
-            return;
-        }
-        Set<Long> listUserId = page.stream()
-                .flatMap(e -> Stream.of(e.getCreatedBy(), e.getUpdatedBy()))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-
-        Map<Long, String> mapNameUserById = userRepository
-                .findAllByIdIn(listUserId)
-                .stream()
-                .collect(Collectors.toMap(UserEntity::getUserId, UserEntity::getFullName));
-        page.forEach(e -> {
-                    e.setCreator(mapNameUserById.getOrDefault(e.getCreatedBy(), Constants.EMPTY_STRING));
-                    e.setUpdater(mapNameUserById.getOrDefault(e.getUpdatedBy(), Constants.EMPTY_STRING));
-                }
-        );
     }
 
 }

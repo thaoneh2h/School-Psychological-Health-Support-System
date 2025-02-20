@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Table(name = "SupportPrograms")
 @Getter
 @Setter
-public class SupportProgramEntity {
+public class SupportProgramEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +39,9 @@ public class SupportProgramEntity {
 
     @OneToMany(mappedBy = "program")
     private List<ProgramRegistrationEntity> registrations;
+
+    @Override
+    public Long getId() {
+        return programId;
+    }
 }

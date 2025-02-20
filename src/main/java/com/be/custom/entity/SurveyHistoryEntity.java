@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "SurveyHistory")
 @Getter
 @Setter
-public class SurveyHistoryEntity {
+public class SurveyHistoryEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +32,9 @@ public class SurveyHistoryEntity {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Override
+    public Long getId() {
+        return historyId;
+    }
 }

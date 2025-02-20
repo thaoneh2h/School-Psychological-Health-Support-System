@@ -1,5 +1,6 @@
 package com.be.base.core;
 
+import com.be.custom.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -29,9 +30,6 @@ public abstract class BaseEntity {
 
     @Transient
     protected String updater;
-
-    protected Long createdBy;
-    protected Long updatedBy;
 
     @JsonIgnore
     protected boolean isDeleted;

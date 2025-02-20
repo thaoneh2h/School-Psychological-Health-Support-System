@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "Resources")
 @Getter
 @Setter
-public class ResourceEntity {
+public class ResourceEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +34,9 @@ public class ResourceEntity {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Override
+    public Long getId() {
+        return resourceId;
+    }
 }

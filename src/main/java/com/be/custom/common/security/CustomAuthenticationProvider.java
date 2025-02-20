@@ -1,7 +1,7 @@
 package com.be.custom.common.security;
 
-import com.be.custom.entity.user.TypeUser;
-import com.be.custom.entity.user.UserEntity;
+import com.be.custom.entity.TypeUser;
+import com.be.custom.entity.UserEntity;
 import com.be.custom.enums.Role;
 import com.be.custom.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +34,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("validate user: {}", username);
         String password = authentication.getCredentials().toString();
 
-        Optional<UserEntity> userOpt = userRepository.findByUsernameAndIsDeletedFalse(username);
+        Optional<UserEntity> userOpt = userRepository.findByEmailAndIsDeletedFalse(username);
         if (userOpt.isEmpty()) {
             log.info("user is invalid");
             throw new BadCredentialsException("Username or memberCode is incorrect!");
         }
 
         UserEntity userEntity = userOpt.get();
-        if (!passwordEncoder.matches(password, userEntity.getPassword())) {
+        if (!passwordEncoder.matches(password, userEntity.getPasswordHash())) {
             log.info("password is incorrect");
             throw new BadCredentialsException("Username or memberCode is incorrect!");
         }
@@ -53,7 +53,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_SYSTEM_ADMIN"));
-        UserDetails userDetails = new CustomUserDetails(userEntity, TypeUser.WEB_ADMIN, "");
+        UserDetails userDetails = new CustomUserDetails(userEntity, "");
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 

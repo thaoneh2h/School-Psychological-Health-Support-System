@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "BlogPosts")
 @Getter
 @Setter
-public class BlogPostEntity {
+public class BlogPostEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +35,9 @@ public class BlogPostEntity {
 
     @Column(nullable = false)
     private Boolean isDeleted = false;
+
+    @Override
+    public Long getId() {
+        return postId;
+    }
 }

@@ -1,7 +1,7 @@
 package com.be.custom.common.security;
 
-import com.be.custom.entity.user.TypeUser;
-import com.be.custom.entity.user.UserEntity;
+import com.be.custom.entity.TypeUser;
+import com.be.custom.entity.UserEntity;
 import com.be.custom.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,12 +36,11 @@ public class CustomUserDetails implements UserDetails {
     private TypeUser typeUser;
     private Role role;
 
-    public CustomUserDetails(UserEntity user, TypeUser typeUser, String accessToken) {
+    public CustomUserDetails(UserEntity user,  String accessToken) {
         this.accessToken = accessToken;
-        this.userId = user.getId();
-        this.username = user.getUsername();
-        this.name = user.getName();
-        this.typeUser = typeUser;
+        this.userId = user.getUserId();
+        this.username = user.getEmail();
+        this.name = user.getFullName();
         this.role = user.getRole();
     }
 

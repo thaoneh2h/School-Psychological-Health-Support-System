@@ -4,7 +4,7 @@ import com.be.base.core.BaseService;
 import com.be.base.dto.ServerResponse;
 import com.be.custom.dto.request.SaveUserDto;
 import com.be.custom.dto.response_api.UserResponseDto;
-import com.be.custom.entity.user.UserEntity;
+import com.be.custom.entity.UserEntity;
 import com.be.custom.enums.Role;
 import com.be.custom.repository.UserRepository;
 import com.be.custom.utils.StringUtils;
@@ -30,13 +30,13 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public Optional<UserEntity> validateUser(String username, String password) {
-        Optional<UserEntity> userOpt = repository.findByUsernameAndIsDeletedFalse(username);
+    public Optional<UserEntity> validateUser(String email, String password) {
+        Optional<UserEntity> userOpt = repository.findByEmailAndIsDeletedFalse(email);
         if (userOpt.isEmpty()) {
             return Optional.empty();
         }
         UserEntity userEntity = userOpt.get();
-        if (passwordEncoder.matches(password, userEntity.getPassword()) && userEntity.isActive()) {
+        if (passwordEncoder.matches(password, userEntity.getPasswordHash()) && !userEntity.isDeleted()) {
             return userOpt;
         } else {
             return Optional.empty();
@@ -53,9 +53,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             listRoleFilter = List.of(Role.COMPANY_STAFF);
         }
 
-        Page<UserEntity> result = repository.getPageAdmin(keyword, listRoleFilter, pageable);
-        setCreatorAndUpdater(result);
-        return result;
+        return repository.getPageAdmin(keyword, listRoleFilter, pageable);
     }
 
     public ServerResponse saveUser(SaveUserDto saveUserDto) {
@@ -89,14 +87,14 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             userToSave = userToSaveOpt.get();
         } else {
             userToSave = new UserEntity();
-            userToSave.setActive(true);
+            userToSave.setIsDeleted(false);
         }
 
-        userToSave.setPassword(passwordEncoder.encode(saveUserDto.getPassword()));
-        userToSave.setName(saveUserDto.getName());
-        userToSave.setUsername(username);
+        userToSave.setPasswordHash(passwordEncoder.encode(saveUserDto.getPassword()));
+        userToSave.setFullName(saveUserDto.getName());
+        userToSave.setEmail(username);
         userToSave.setEmail(saveUserDto.getEmail());
-        userToSave.setPhone(saveUserDto.getPhone());
+        userToSave.setPhoneNumber(saveUserDto.getPhone());
         userToSave.setRole(saveUserDto.getRole());
         return Optional.of(userToSave);
     }
@@ -109,11 +107,11 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         UserEntity userEntity = userEntityOpt.get();
         UserResponseDto userDto = new UserResponseDto();
         userDto.setId(userEntity.getId());
-        userDto.setName(userEntity.getName());
-        userDto.setUsername(userEntity.getUsername());
+        userDto.setName(userEntity.getFullName());
+        userDto.setUsername(userEntity.getEmail());
         userDto.setRole(userEntity.getRole());
         userDto.setEmail(userEntity.getEmail());
-        userDto.setPhone(userEntity.getPhone());
+        userDto.setPhone(userEntity.getPhoneNumber());
         return ServerResponse.success(userDto);
     }
 
@@ -124,8 +122,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         }
         UserEntity user = userOpt.get();
         user.setDeleted(true);
-        user.setOldUsername(user.getUsername());
-        user.setUsername(null);
+        user.setEmail(null);
         user.setUpdatedTime(new Date());
         repository.save(user);
         return ServerResponse.SUCCESS;
@@ -137,7 +134,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             return ServerResponse.ERROR;
         }
         UserEntity user = userOpt.get();
-        user.setPassword(passwordEncoder.encode(user.getUsername()));
+        user.setPasswordHash(passwordEncoder.encode(user.getEmail()));
         user.setUpdatedTime(new Date());
         repository.save(user);
         return ServerResponse.SUCCESS;
@@ -149,7 +146,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             return ServerResponse.ERROR;
         }
         UserEntity user = userOpt.get();
-        user.setActive(!user.isActive());
+        user.setIsDeleted(!user.isDeleted());
         user.setUpdatedTime(new Date());
         repository.save(user);
         return ServerResponse.SUCCESS;

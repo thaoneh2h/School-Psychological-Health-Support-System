@@ -1,4 +1,4 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
 public enum TypeUser {
 

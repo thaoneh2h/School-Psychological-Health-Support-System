@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "SurveyOptions")
 @Getter
 @Setter
-public class SurveyOptionEntity {
+public class SurveyOptionEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,5 +22,10 @@ public class SurveyOptionEntity {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String optionText;
+
+    @Override
+    public Long getId() {
+        return optionId;
+    }
 
 }

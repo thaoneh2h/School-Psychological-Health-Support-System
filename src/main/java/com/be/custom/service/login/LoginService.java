@@ -6,8 +6,8 @@ import com.be.custom.dto.cache.TokenDto;
 import com.be.custom.dto.cache.TypeToken;
 import com.be.custom.dto.login.LoginAdminDto;
 import com.be.custom.dto.login.LoginResponseDto;
-import com.be.custom.entity.user.TypeUser;
-import com.be.custom.entity.user.UserEntity;
+import com.be.custom.entity.TypeUser;
+import com.be.custom.entity.UserEntity;
 import com.be.custom.service.UserService;
 import com.be.custom.service.cache.TokenCacheService;
 import com.be.custom.utils.UserDetailUtils;
@@ -38,15 +38,15 @@ public class LoginService {
         }
 
         UserEntity user = userOpt.get();
-        Long userId = user.getId();
+        Long userId = user.getUserId();
 
         String token = tokenCacheService.generateToken();
-        TokenDto tokenDto = new TokenDto(token, userId, TypeToken.ACCESS_TOKEN, TypeUser.WEB_ADMIN);
+        TokenDto tokenDto = new TokenDto(token, userId, TypeToken.ACCESS_TOKEN);
         tokenCacheService.updateCache(tokenDto);
 
-        UserDetailUtils.setUserAuthenticated(user, TypeUser.WEB_ADMIN, token);
+        UserDetailUtils.setUserAuthenticated(user, token);
 
-        LoginResponseDto response = new LoginResponseDto(user.getId(), username, user.getName());
+        LoginResponseDto response = new LoginResponseDto(user.getUserId(), username, user.getFullName());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", String.format("access_token=%s;Max-Age=86400;Path=/;", token));
         return ResponseEntity.ok().headers(headers).body(ServerResponse.success(response));

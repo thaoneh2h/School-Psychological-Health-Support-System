@@ -2,8 +2,8 @@ package com.be.custom.common.security;
 
 import com.be.custom.dto.cache.TokenDto;
 import com.be.custom.dto.cache.TypeToken;
-import com.be.custom.entity.user.TypeUser;
-import com.be.custom.entity.user.UserEntity;
+import com.be.custom.entity.TypeUser;
+import com.be.custom.entity.UserEntity;
 import com.be.custom.repository.UserRepository;
 import com.be.custom.service.cache.TokenCacheService;
 import com.be.custom.utils.UserDetailUtils;
@@ -54,18 +54,15 @@ public class HeaderAuthenticationFilter implements Filter {
                 return;
             }
             TokenDto tokenDto = tokenOpt.get();
-            TypeUser typeUser = tokenDto.getTypeUser();
             Long userId = tokenDto.getUserId();
-            if (TypeUser.WEB_ADMIN == typeUser) {
-                Optional<UserEntity> userOpt = userRepository.findByIdAndIsDeletedFalseAndActiveTrue(userId);
-                if (userOpt.isEmpty()) {
-                    log.info("web admin is invalid with id {}", userId);
-                    response.setStatus(CODE_TOKEN_INVALID);
-                    return;
-                }
-                UserEntity user = userOpt.get();
-                UserDetailUtils.setUserAuthenticated(user, TypeUser.WEB_ADMIN, accessToken);
+            Optional<UserEntity> userOpt = userRepository.findByUserIdAndIsDeletedFalse(userId);
+            if (userOpt.isEmpty()) {
+                log.info("web admin is invalid with id {}", userId);
+                response.setStatus(CODE_TOKEN_INVALID);
+                return;
             }
+            UserEntity user = userOpt.get();
+            UserDetailUtils.setUserAuthenticated(user, accessToken);
 
         }
         chain.doFilter(request, response);

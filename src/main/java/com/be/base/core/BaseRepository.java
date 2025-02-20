@@ -9,7 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface BaseRepository<E extends BaseEntity> extends PagingAndSortingRepository<E, Long>, JpaRepository<E, Long> {
+public interface BaseRepository<E> extends PagingAndSortingRepository<E, Long>, JpaRepository<E, Long> {
 
     Page<E> findByIsDeleted(Pageable page, boolean isDeleted);
 

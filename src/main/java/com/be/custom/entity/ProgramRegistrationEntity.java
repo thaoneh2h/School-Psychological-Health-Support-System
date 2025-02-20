@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "ProgramRegistrations")
 @Getter
 @Setter
-public class ProgramRegistrationEntity {
+public class ProgramRegistrationEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +36,9 @@ public class ProgramRegistrationEntity {
 
     @Column(nullable = false)
     private Boolean isDeleted = false;
+
+    @Override
+    public Long getId() {
+        return registrationId;
+    }
 }

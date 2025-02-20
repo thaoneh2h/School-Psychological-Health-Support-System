@@ -2,7 +2,7 @@ package com.be.custom.service.authorization;
 
 import com.be.custom.common.security.CustomUserDetails;
 import com.be.custom.common.security.UserDetailsHolder;
-import com.be.custom.entity.user.TypeUser;
+import com.be.custom.entity.TypeUser;
 import com.be.custom.enums.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

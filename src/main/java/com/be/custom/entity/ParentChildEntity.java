@@ -1,5 +1,6 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
+import com.be.base.core.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "ParentChildren")
 @Getter
 @Setter
-public class ParentChildEntity {
+public class ParentChildEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +26,9 @@ public class ParentChildEntity {
 
     @Column(nullable = false)
     private String relationship;
+
+    @Override
+    public Long getId() {
+        return parentChildId;
+    }
 }

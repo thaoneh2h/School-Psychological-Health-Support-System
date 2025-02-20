@@ -1,4 +1,4 @@
-package com.be.custom.entity.user;
+package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
 import com.be.custom.enums.Role;
@@ -15,7 +15,7 @@ import java.util.List;
 @Where(clause = "is_deleted=false")
 @Getter
 @Setter
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,7 @@ public class UserEntity {
 
     private LocalDate dateOfBirth;
 
-    @Column(columnDefinition = "VARCHAR(10) CHECK (gender IN ('Male', 'Female', 'Other'))")
+    @Column(nullable = false)
     private String gender;
 
     private String phoneNumber;
@@ -83,4 +83,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     private List<SurveyHistoryEntity> surveyHistories;
+
+    @Override
+    public Long getId() {
+        return userId;
+    }
 }
