@@ -2,7 +2,7 @@ package com.be.custom.enums;
 
 public enum Role {
 
-    SYSTEM_ADMIN, STUDENT, PARENT
+    SYSTEM_ADMIN, STUDENT, PARENT, PSYCHOLOGIST
 
 }
 

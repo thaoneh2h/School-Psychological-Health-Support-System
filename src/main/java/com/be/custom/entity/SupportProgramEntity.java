@@ -29,7 +29,7 @@ public class SupportProgramEntity extends BaseEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "UpdatedBy")
+    @JoinColumn(name = "updated_by")
     private UserEntity updatedBy;
 
     @Column(nullable = false)

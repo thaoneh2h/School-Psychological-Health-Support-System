@@ -39,4 +39,12 @@ public class PreAuthorizeService {
         return TypeUser.WEB_ADMIN == userDetails.getTypeUser();
     }
 
+    public boolean isLogin() {
+        CustomUserDetails userDetails = userDetailsHolder.getCurrentUser();
+        if (userDetails == null) {
+            return false;
+        }
+        return userDetails.getUsername() != null;
+    }
+
 }

@@ -1,11 +1,11 @@
 package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
+import com.be.custom.enums.StatusProgramRegistration;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -19,18 +19,19 @@ public class ProgramRegistrationEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "UserID", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "ProgramID", nullable = false)
+    @JoinColumn(name = "program_id", nullable = false)
     private SupportProgramEntity program;
 
     @Column(nullable = false)
-    private LocalDateTime registeredAt = LocalDateTime.now();
+    private Date registeredAt = new Date();
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusProgramRegistration status;
 
     @Column(nullable = false)
     private Date updatedAt = new Date();

@@ -27,4 +27,18 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 
     UserEntity findByEmail(String username);
 
+    @Query(value = "select u from UserEntity u " +
+            "join ParentChildEntity  pc on u.id = pc.child.id " +
+            "where pc.parent.id = ?1 " +
+            "and pc.deleted = false " +
+            "and u.deleted = false")
+    List<UserEntity> getListStudentOfParent(Long parentId);
+
+    @Query(value = "select u.id from UserEntity u " +
+            "join ParentChildEntity  pc on u.id = pc.child.id " +
+            "where pc.parent.id = ?1 " +
+            "and pc.deleted = false " +
+            "and u.deleted = false")
+    List<Long> getListStudentIdOfParent(Long parentId);
+
 }

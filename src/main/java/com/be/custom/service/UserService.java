@@ -162,4 +162,13 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         return userEntity != null && !userEntity.getId().equals(oldCompanyAdminId);
     }
 
+    public List<UserEntity> getListStudentOfParent(Long parentId) {
+        Optional<UserEntity> parentOpt = userRepository.findById(parentId);
+        if (parentOpt.isEmpty() || parentOpt.get().getRole() != Role.PARENT) {
+            return null;
+        }
+
+        return userRepository.getListStudentOfParent(parentId);
+    }
+
 }
