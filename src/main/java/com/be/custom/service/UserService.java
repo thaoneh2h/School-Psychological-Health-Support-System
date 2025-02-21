@@ -3,6 +3,7 @@ package com.be.custom.service;
 import com.be.base.core.BaseService;
 import com.be.base.dto.ServerResponse;
 import com.be.custom.dto.request.SaveUserDto;
+import com.be.custom.dto.request.UpdateProfileRequest;
 import com.be.custom.dto.response_api.UserResponseDto;
 import com.be.custom.entity.UserEntity;
 import com.be.custom.enums.Role;
@@ -17,7 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +31,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService extends BaseService<UserEntity, UserRepository> {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+    private static final String UPLOAD_DIR = "src/main/resources/static/images/";
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -153,7 +158,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         return ServerResponse.SUCCESS;
     }
 
-    private Optional<UserEntity> findUserById(Long id) {
+    public Optional<UserEntity> findUserById(Long id) {
         return repository.findByIdAndIsDeletedFalse(id);
     }
 
@@ -169,6 +174,47 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
         }
 
         return userRepository.getListStudentOfParent(parentId);
+    }
+
+    public List<UserEntity> getListPsychologist() {
+        return userRepository.getListUserByRole(Role.PSYCHOLOGIST);
+    }
+
+    public ServerResponse updateProfile(Long userId, UpdateProfileRequest request, MultipartFile file) {
+        UserEntity user = userRepository.findById(userId)
+                .orElse(null);
+        if (user == null) {
+            return ServerResponse.ERROR;
+        }
+        try {
+            String filePath = null;
+            if (file != null && !file.isEmpty()) {
+                filePath = saveFile(file);
+            }
+            if (request.getFullName() != null) user.setFullName(request.getFullName());
+            if (request.getDateOfBirth() != null) user.setDateOfBirth(request.getDateOfBirth());
+            if (request.getGender() != null) user.setGender(request.getGender());
+            if (request.getPhoneNumber() != null) user.setPhoneNumber(request.getPhoneNumber());
+            if (filePath != null) user.setImageUrl(filePath);
+            if (request.getAddress() != null) user.setAddress(request.getAddress());
+
+            userRepository.save(user);
+        } catch (Exception e) {
+            LOGGER.info("Error when update profile {}", e.getMessage());
+            return ServerResponse.ERROR;
+        }
+        return ServerResponse.SUCCESS;
+    }
+
+    private String saveFile(MultipartFile file) throws IOException {
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        File dir = new File(UPLOAD_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File destinationFile = new File(UPLOAD_DIR + fileName);
+        file.transferTo(destinationFile);
+        return fileName;
     }
 
 }

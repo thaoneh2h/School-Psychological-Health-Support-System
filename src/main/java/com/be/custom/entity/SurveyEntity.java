@@ -24,11 +24,11 @@ public class SurveyEntity extends BaseEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "CreatedBy")
+    @JoinColumn(name = "created_by")
     private UserEntity createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "UpdatedBy")
+    @JoinColumn(name = "updated_by")
     private UserEntity updatedBy;
 
     private Boolean isDeleted = false;

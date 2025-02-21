@@ -41,4 +41,9 @@ public interface UserRepository extends BaseRepository<UserEntity> {
             "and u.deleted = false")
     List<Long> getListStudentIdOfParent(Long parentId);
 
+    @Query(value = "select u from UserEntity u " +
+            "where u.isDeleted = false " +
+            "and u.role =?1")
+    List<UserEntity> getListUserByRole(Role role);
+
 }

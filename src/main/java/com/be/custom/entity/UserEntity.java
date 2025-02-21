@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,11 +34,13 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-    private LocalDate dateOfBirth;
-    
+    private Date dateOfBirth;
+
     private String gender;
 
     private String phoneNumber;
+
+    private String imageUrl;
 
     @Column(columnDefinition = "TEXT")
     private String address;

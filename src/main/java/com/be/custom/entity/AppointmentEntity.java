@@ -1,6 +1,9 @@
 package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
+import com.be.custom.enums.StatusBookingAppointment;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,28 +22,29 @@ public class AppointmentEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "StudentID", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     private UserEntity student;
 
     @ManyToOne
-    @JoinColumn(name = "ParentID")
+    @JoinColumn(name = "parent_id")
     private UserEntity parent;
 
     @ManyToOne
-    @JoinColumn(name = "PsychologistID", nullable = false)
+    @JoinColumn(name = "psychologist_id", nullable = false)
     private UserEntity psychologist;
 
     @Column(nullable = false)
-    private LocalDateTime appointmentDate;
+    private Date appointmentDate;
 
     @Column(nullable = false)
-    private LocalDateTime startTime;
+    private Date startTime;
 
     @Column(nullable = false)
-    private LocalDateTime endTime;
+    private Date endTime;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusBookingAppointment status;
 
     @Column(columnDefinition = "TEXT")
     private String notes;
@@ -49,11 +53,11 @@ public class AppointmentEntity extends BaseEntity {
     private Date createdAt = new Date();
 
     @ManyToOne
-    @JoinColumn(name = "CreatedBy", nullable = false)
+    @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "UpdatedBy")
+    @JoinColumn(name = "updated_by")
     private UserEntity updatedBy;
 
     @Column(nullable = false)
