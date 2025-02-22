@@ -1,6 +1,7 @@
 package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class SurveyOptionEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "QuestionID", nullable = false)
     private SurveyQuestionEntity question;

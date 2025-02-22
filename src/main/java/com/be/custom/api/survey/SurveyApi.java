@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -39,28 +40,29 @@ public class SurveyApi {
     @PostMapping("/save-data-answer")
     public ResponseEntity<ServerResponse> saveAnswerSurvey(@RequestBody List<SaveAnswerSurveyRequest> dataAnswer,
                                                            @RequestParam Long surveyId,
-                                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
+                                                           @ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getUserId();
         return ResponseEntity.ok(surveyResponseService.saveAnswerSurvey(userId, dataAnswer, surveyId));
     }
 
     @GetMapping("/get-history-survey-from-student")
-    public ResponseEntity<List<SurveyHistoryEntity>> getHistorySurveyFromStudent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<SurveyHistoryEntity>> getHistorySurveyFromStudent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long studentId = userDetails.getUserId();
         List<Long> listStudentId = List.of(studentId);
         return ResponseEntity.ok(surveyHistoryService.getListHistorySurveyByListStudentId(listStudentId));
     }
 
     @GetMapping("/get-history-survey-from-parent")
-    public ResponseEntity<List<SurveyHistoryEntity>> getHistorySurveyFromParent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<SurveyHistoryEntity>> getHistorySurveyFromParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long parentId = userDetails.getUserId();
         return ResponseEntity.ok(surveyHistoryService.getListHistorySurveyFromParent(parentId));
     }
 
     @GetMapping("/get-detail-history-of-survey")
-    public ResponseEntity<List<DetailAnswerDto>> getDetailHistory(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<List<DetailAnswerDto>> getDetailHistory(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
                                                                   @RequestParam Long surveyId) {
-        return ResponseEntity.ok(null);
+        Long studentId = userDetails.getUserId();
+        return ResponseEntity.ok(surveyHistoryService.getDetailSurvey(surveyId, studentId));
     }
 
 }

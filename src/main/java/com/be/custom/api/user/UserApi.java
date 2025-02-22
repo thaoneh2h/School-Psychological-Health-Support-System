@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class UserApi {
     private final UserService userService;
 
     @PostMapping("/get-student-of-parent")
-    public ResponseEntity<List<UserEntity>> getListStudentOfParent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<UserEntity>> getListStudentOfParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long parentId = userDetails.getUserId();
         List<UserEntity> listStudentOfParent = userService.getListStudentOfParent(parentId);
         return ResponseEntity.ok(listStudentOfParent);
@@ -34,15 +35,15 @@ public class UserApi {
     }
 
     @GetMapping("/get-profile")
-    public ResponseEntity<UserEntity> getProfileOfUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<UserEntity> getProfileOfUser(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long userId = userDetails.getUserId();
         return ResponseEntity.ok(userService.findUserById(userId).orElse(null));
     }
 
     @PutMapping("/update-profile")
     public ResponseEntity<ServerResponse> updateProfile(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestPart("profile") UpdateProfileRequest request,
+            @ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody UpdateProfileRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file) {
         try {
             Long userId = userDetails.getUserId();

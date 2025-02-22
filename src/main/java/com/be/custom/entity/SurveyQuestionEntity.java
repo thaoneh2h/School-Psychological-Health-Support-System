@@ -2,6 +2,7 @@ package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
 import com.be.custom.enums.TypeQuestion;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class SurveyQuestionEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "SurveyID", nullable = false)
     private SurveyEntity survey;
@@ -29,6 +31,7 @@ public class SurveyQuestionEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TypeQuestion questionType;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "UpdatedBy")
     private UserEntity updatedBy;

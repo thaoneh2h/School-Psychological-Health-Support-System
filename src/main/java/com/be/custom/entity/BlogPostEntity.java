@@ -1,6 +1,7 @@
 package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,8 +25,9 @@ public class BlogPostEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "AuthorID", nullable = false)
+    @JoinColumn(name = "authorId", nullable = false)
     private UserEntity author;
 
     @Column(nullable = false)

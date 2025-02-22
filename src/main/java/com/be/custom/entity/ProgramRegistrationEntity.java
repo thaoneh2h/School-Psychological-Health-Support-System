@@ -2,6 +2,7 @@ package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
 import com.be.custom.enums.StatusProgramRegistration;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,10 +19,12 @@ public class ProgramRegistrationEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "program_id", nullable = false)
     private SupportProgramEntity program;

@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class AppointmentApi {
     private final AppointmentService appointmentService;
 
     @PostMapping("/booking-from-student")
-    public ResponseEntity<ServerResponse> bookingFromStudent(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<ServerResponse> bookingFromStudent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
                                                              @RequestBody SaveAppointmentDto saveAppointmentDto) {
         Long studentId = userDetails.getUserId();
         saveAppointmentDto.setStudentId(studentId);
@@ -30,7 +30,7 @@ public class AppointmentApi {
     }
 
     @PostMapping("/booking-from-parent")
-    public ResponseEntity<ServerResponse> bookingFromParent(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<ServerResponse> bookingFromParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
                                                             @RequestBody SaveAppointmentDto saveAppointmentDto) {
         Long parentId = userDetails.getUserId();
         saveAppointmentDto.setParentId(parentId);
@@ -38,21 +38,21 @@ public class AppointmentApi {
     }
 
     @GetMapping("/get-history-booking-from-student")
-    public ResponseEntity<List<AppointmentEntity>> getHistoryBookingFromStudent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<AppointmentEntity>> getHistoryBookingFromStudent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long studentId = userDetails.getUserId();
         List<Long> listStudentId = Collections.singletonList(studentId);
         return ResponseEntity.ok(appointmentService.getHistoryBooking(listStudentId));
     }
 
     @GetMapping("/get-booking -all-student-from-parent")
-    public ResponseEntity<List<AppointmentEntity>> getAllBookingFromParent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<AppointmentEntity>> getAllBookingFromParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long parentId = userDetails.getUserId();
         return ResponseEntity.ok(appointmentService.getAllBookingOfStudentFromParent(parentId));
     }
 
-    @GetMapping("/get-history-booking-from-student")
-    public ResponseEntity<List<AppointmentEntity>> getHistoryBookingFromStudent(@AuthenticationPrincipal CustomUserDetails userDetails,
-                                                                                @RequestParam Long studentId) {
+    @GetMapping("/get-history-booking-of-student-from-parent")
+    public ResponseEntity<List<AppointmentEntity>> getHistoryBookingOfStudentFromParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                                        @RequestParam Long studentId) {
         List<Long> listStudentId = Collections.singletonList(studentId);
         return ResponseEntity.ok(appointmentService.getHistoryBooking(listStudentId));
     }

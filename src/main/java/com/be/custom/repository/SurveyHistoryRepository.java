@@ -9,7 +9,6 @@ import java.util.List;
 public interface SurveyHistoryRepository extends BaseRepository<SurveyHistoryEntity> {
 
     @Query(value = "select sh from SurveyHistoryEntity sh " +
-            "where sh.deleted = false " +
-            "and sh.user.id in ?1")
+            "where sh.user.id in ?1")
     List<SurveyHistoryEntity> getListHistorySurveyByListStudentId(List<Long> listStudentId);
 }

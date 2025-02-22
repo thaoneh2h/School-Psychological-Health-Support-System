@@ -17,11 +17,11 @@ public class ParentChildEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ParentID", nullable = false)
+    @JoinColumn(name = "parent_id", nullable = false)
     private UserEntity parent;
 
     @ManyToOne
-    @JoinColumn(name = "ChildID", nullable = false)
+    @JoinColumn(name = "child_id", nullable = false)
     private UserEntity child;
 
     @Column(nullable = false)

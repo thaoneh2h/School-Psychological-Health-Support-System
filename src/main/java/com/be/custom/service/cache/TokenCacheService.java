@@ -5,20 +5,18 @@ import com.be.custom.dto.cache.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
 public class TokenCacheService {
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final Map<String, String> tokenCache = new ConcurrentHashMap<>();
 
     public String generateToken() {
         String uuid = UUID.randomUUID().toString();
@@ -29,10 +27,14 @@ public class TokenCacheService {
     public void updateCache(TokenDto token) {
         log.info("Update token temp cache");
         Gson gson = new Gson();
+        String tokenJson = gson.toJson(token);
+        
+        tokenCache.put(token.getToken(), tokenJson);
+        
         if (TypeToken.ACCESS_TOKEN == token.getTypeToken()) {
-            redisTemplate.opsForValue().set(token.getToken(), gson.toJson(token), 1, TimeUnit.DAYS);
+            scheduleTokenRemoval(token.getToken(), 1, TimeUnit.DAYS);
         } else {
-            redisTemplate.opsForValue().set(token.getToken(), gson.toJson(token), 30, TimeUnit.DAYS);
+            scheduleTokenRemoval(token.getToken(), 30, TimeUnit.DAYS);
         }
     }
 
@@ -40,24 +42,31 @@ public class TokenCacheService {
         if (token == null) {
             return Optional.empty();
         }
-        TokenDto tokenDto = null;
-        Object json = redisTemplate.opsForValue().get(token);
-        if (json != null) {
+
+        String tokenJson = tokenCache.get(token);
+        if (tokenJson != null) {
             try {
-                tokenDto = new Gson().fromJson(String.valueOf(json), TokenDto.class);
+                TokenDto tokenDto = new Gson().fromJson(tokenJson, TokenDto.class);
                 if (!tokenDto.getTypeToken().equals(typeToken)) {
                     return Optional.empty();
                 }
+                return Optional.of(tokenDto);
             } catch (JsonSyntaxException e) {
-                log.error("Json is wrong format!. Json is: {}", json);
+                log.error("Json is wrong format!. Json is: {}", tokenJson);
             }
         }
-        if (tokenDto == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(tokenDto);
-        }
+        return Optional.empty();
     }
 
-
+    private void scheduleTokenRemoval(String token, long delay, TimeUnit timeUnit) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(timeUnit.toMillis(delay));
+                tokenCache.remove(token);
+                log.info("Token {} has been removed from cache.", token);
+            } catch (InterruptedException e) {
+                log.error("Error while removing token from cache: {}", e.getMessage());
+            }
+        }).start();
+    }
 }

@@ -1,6 +1,7 @@
 package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,7 @@ public class SupportProgramEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "updated_by")
     private UserEntity updatedBy;

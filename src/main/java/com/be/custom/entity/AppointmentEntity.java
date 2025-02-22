@@ -2,6 +2,7 @@ package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
 import com.be.custom.enums.StatusBookingAppointment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -21,14 +22,17 @@ public class AppointmentEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     private UserEntity student;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private UserEntity parent;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "psychologist_id", nullable = false)
     private UserEntity psychologist;

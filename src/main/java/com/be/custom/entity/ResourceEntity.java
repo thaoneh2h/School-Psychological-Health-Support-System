@@ -1,6 +1,7 @@
 package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +27,7 @@ public class ResourceEntity extends BaseEntity {
 
     private String filePath;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "UploadedBy", nullable = false)
     private UserEntity uploadedBy;

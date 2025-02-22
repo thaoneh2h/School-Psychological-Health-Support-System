@@ -2,6 +2,7 @@ package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
 import com.be.custom.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
@@ -49,39 +50,51 @@ public class UserEntity extends BaseEntity {
 
     private Boolean isDeleted = false;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "parent")
     private List<ParentChildEntity> children;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "child")
     private List<ParentChildEntity> parents;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "createdBy")
     private List<SurveyEntity> createdSurveys;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "updatedBy")
     private List<SurveyEntity> updatedSurveys;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "updatedBy")
     private List<SupportProgramEntity> updatedPrograms;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<ProgramRegistrationEntity> programRegistrations;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "student")
     private List<AppointmentEntity> studentAppointments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "parent")
     private List<AppointmentEntity> parentAppointments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "psychologist")
     private List<AppointmentEntity> psychologistAppointments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "author")
     private List<BlogPostEntity> blogPosts;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "uploadedBy")
     private List<ResourceEntity> resources;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<SurveyHistoryEntity> surveyHistories;
 

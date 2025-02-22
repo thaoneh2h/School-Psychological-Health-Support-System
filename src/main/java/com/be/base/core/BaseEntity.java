@@ -20,9 +20,11 @@ import java.util.Date;
 @NoArgsConstructor
 public abstract class BaseEntity {
 
+    @Transient
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     protected Date createdAt;
 
+    @Transient
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     protected Date updatedAt;
 
