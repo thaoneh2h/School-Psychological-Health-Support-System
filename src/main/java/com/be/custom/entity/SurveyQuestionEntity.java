@@ -1,6 +1,7 @@
 package com.be.custom.entity;
 
 import com.be.base.core.BaseEntity;
+import com.be.custom.enums.TypeQuestion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,7 +26,8 @@ public class SurveyQuestionEntity extends BaseEntity {
     private String questionText;
 
     @Column(nullable = false)
-    private String questionType;
+    @Enumerated(EnumType.STRING)
+    private TypeQuestion questionType;
 
     @ManyToOne
     @JoinColumn(name = "UpdatedBy")

@@ -1,16 +1,19 @@
 package com.be.custom.api.survey;
 
 import com.be.base.dto.ServerResponse;
-import com.be.custom.dto.request.SaveUserDto;
+import com.be.custom.common.security.CustomUserDetails;
+import com.be.custom.dto.request.SaveAnswerSurveyRequest;
+import com.be.custom.dto.response_api.DetailAnswerDto;
+import com.be.custom.dto.response_api.QuestionOfSurveyDto;
 import com.be.custom.entity.SurveyEntity;
-import com.be.custom.service.UserService;
+import com.be.custom.entity.SurveyHistoryEntity;
+import com.be.custom.service.survey.SurveyHistoryService;
+import com.be.custom.service.survey.SurveyResponseService;
 import com.be.custom.service.survey.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,11 +23,44 @@ import java.util.List;
 public class SurveyApi {
 
     private final SurveyService surveyService;
+    private final SurveyResponseService surveyResponseService;
+    private final SurveyHistoryService surveyHistoryService;
 
-    @PostMapping("/get-all-survey")
+    @GetMapping("/get-all-survey")
     public ResponseEntity<List<SurveyEntity>> getAllSurvey() {
         return ResponseEntity.ok(surveyService.getAllSurvey());
     }
-    
-    
+
+    @GetMapping("/get-data-survey")
+    public ResponseEntity<List<QuestionOfSurveyDto>> getDataOfSurvey(@RequestParam Long surveyId) {
+        return ResponseEntity.ok(surveyService.getListQuestionOfSurvey(surveyId));
+    }
+
+    @PostMapping("/save-data-answer")
+    public ResponseEntity<ServerResponse> saveAnswerSurvey(@RequestBody List<SaveAnswerSurveyRequest> dataAnswer,
+                                                           @RequestParam Long surveyId,
+                                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long userId = userDetails.getUserId();
+        return ResponseEntity.ok(surveyResponseService.saveAnswerSurvey(userId, dataAnswer, surveyId));
+    }
+
+    @GetMapping("/get-history-survey-from-student")
+    public ResponseEntity<List<SurveyHistoryEntity>> getHistorySurveyFromStudent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long studentId = userDetails.getUserId();
+        List<Long> listStudentId = List.of(studentId);
+        return ResponseEntity.ok(surveyHistoryService.getListHistorySurveyByListStudentId(listStudentId));
+    }
+
+    @GetMapping("/get-history-survey-from-parent")
+    public ResponseEntity<List<SurveyHistoryEntity>> getHistorySurveyFromParent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long parentId = userDetails.getUserId();
+        return ResponseEntity.ok(surveyHistoryService.getListHistorySurveyFromParent(parentId));
+    }
+
+    @GetMapping("/get-detail-history-of-survey")
+    public ResponseEntity<List<DetailAnswerDto>> getDetailHistory(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                  @RequestParam Long surveyId) {
+        return ResponseEntity.ok(null);
+    }
+
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -19,17 +18,17 @@ public class SurveyHistoryEntity extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "UserID", nullable = false)
+    @JoinColumn(name = "user_iD", nullable = false)
     private UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "SurveyID", nullable = false)
+    @JoinColumn(name = "survey_id", nullable = false)
     private SurveyEntity survey;
 
     private Integer score;
 
     @Column(nullable = false)
-    private LocalDateTime completedAt;
+    private Date completedAt;
 
     @Column(nullable = false)
     private Date updatedAt;
