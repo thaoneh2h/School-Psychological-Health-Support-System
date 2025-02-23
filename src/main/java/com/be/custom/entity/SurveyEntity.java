@@ -26,16 +26,17 @@ public class SurveyEntity extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "created_by")
+    @JoinColumn(name = "createdBy")
     private UserEntity createdBy;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "updated_by")
+    @JoinColumn(name = "updatedBy")
     private UserEntity updatedBy;
 
     private Boolean isDeleted = false;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "survey")
     private List<SurveyQuestionEntity> questions;
 

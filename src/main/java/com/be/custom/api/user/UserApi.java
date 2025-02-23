@@ -5,6 +5,7 @@ import com.be.custom.common.security.CustomUserDetails;
 import com.be.custom.dto.request.UpdateProfileRequest;
 import com.be.custom.entity.UserEntity;
 import com.be.custom.service.UserService;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,10 +41,12 @@ public class UserApi {
         return ResponseEntity.ok(userService.findUserById(userId).orElse(null));
     }
 
-    @PutMapping("/update-profile")
+    @PutMapping(value = "/update-profile", consumes = "multipart/form-data")
     public ResponseEntity<ServerResponse> updateProfile(
             @ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody UpdateProfileRequest request,
+            @ApiParam(value = "User profile update request", required = true)
+            @RequestPart("request") UpdateProfileRequest request,
+            @ApiParam(value = "Profile image", required = false)
             @RequestPart(value = "file", required = false) MultipartFile file) {
         try {
             Long userId = userDetails.getUserId();

@@ -51,7 +51,7 @@ public class SurveyService extends BaseService<SurveyEntity, SurveyRepository> {
             List<SurveyOptionEntity> listOptionOfQuestion = null;
             if (typeQuestion == TypeQuestion.CHOOSE_OPTION) {
                 listOptionOfQuestion = listAllOption.stream()
-                        .filter(item -> item.getId().equals(questionId))
+                        .filter(item -> item.getQuestion().getId().equals(questionId))
                         .collect(Collectors.toList());
 
             }

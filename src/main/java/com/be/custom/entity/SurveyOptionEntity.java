@@ -19,7 +19,7 @@ public class SurveyOptionEntity extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "QuestionID", nullable = false)
+    @JoinColumn(name = "question_id", nullable = false)
     private SurveyQuestionEntity question;
 
     @Column(nullable = false, columnDefinition = "TEXT")

@@ -42,7 +42,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             return Optional.empty();
         }
         UserEntity userEntity = userOpt.get();
-        if (passwordEncoder.matches(password, userEntity.getPasswordHash()) && !userEntity.isDeleted()) {
+        if (passwordEncoder.matches(password, userEntity.getPasswordHash())) {
             return userOpt;
         } else {
             return Optional.empty();
@@ -127,7 +127,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             return ServerResponse.ERROR;
         }
         UserEntity user = userOpt.get();
-        user.setDeleted(true);
+        user.setIsDeleted(true);
         user.setEmail(null);
         user.setUpdatedAt(new Date());
         repository.save(user);
@@ -152,7 +152,7 @@ public class UserService extends BaseService<UserEntity, UserRepository> {
             return ServerResponse.ERROR;
         }
         UserEntity user = userOpt.get();
-        user.setIsDeleted(!user.isDeleted());
+        user.setIsDeleted(!user.getIsDeleted());
         user.setUpdatedAt(new Date());
         repository.save(user);
         return ServerResponse.SUCCESS;

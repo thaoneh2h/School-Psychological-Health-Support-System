@@ -20,22 +20,23 @@ import java.util.Date;
 @NoArgsConstructor
 public abstract class BaseEntity {
 
+    @JsonIgnore
     @Transient
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     protected Date createdAt;
 
+    @JsonIgnore
     @Transient
     @JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss")
     protected Date updatedAt;
 
+    @JsonIgnore
     @Transient
     protected String creator;
 
+    @JsonIgnore
     @Transient
     protected String updater;
-
-    @JsonIgnore
-    protected boolean isDeleted;
-
+    
     public abstract Long getId();
 }
