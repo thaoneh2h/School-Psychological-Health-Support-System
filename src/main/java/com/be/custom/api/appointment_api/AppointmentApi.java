@@ -44,7 +44,7 @@ public class AppointmentApi {
         return ResponseEntity.ok(appointmentService.getHistoryBooking(listStudentId));
     }
 
-    @GetMapping("/get-booking -all-student-from-parent")
+    @GetMapping("/get-booking-all-student-from-parent")
     public ResponseEntity<List<AppointmentEntity>> getAllBookingFromParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long parentId = userDetails.getUserId();
         return ResponseEntity.ok(appointmentService.getAllBookingOfStudentFromParent(parentId));

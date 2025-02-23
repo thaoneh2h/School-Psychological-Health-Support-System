@@ -22,7 +22,7 @@ public class UserApi {
 
     private final UserService userService;
 
-    @PostMapping("/get-student-of-parent")
+    @GetMapping("/get-student-of-parent")
     public ResponseEntity<List<UserEntity>> getListStudentOfParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long parentId = userDetails.getUserId();
         List<UserEntity> listStudentOfParent = userService.getListStudentOfParent(parentId);
