@@ -59,20 +59,20 @@ public class AppointmentApi {
     }
 
     @GetMapping("/get-report-form-student")
-    public ResponseEntity<List<ReportAppointmentRes>> getReportFormStudent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<ReportAppointmentRes>> getReportFormStudent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long studentId = userDetails.getUserId();
         List<Long> listStudentId = List.of(studentId);
         return ResponseEntity.ok(appointmentService.getReportAppointment(listStudentId));
     }
 
     @GetMapping("/get-all-report-form-parent")
-    public ResponseEntity<List<ReportAppointmentRes>> getAllReportFormParent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<List<ReportAppointmentRes>> getAllReportFormParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails) {
         Long parentId = userDetails.getUserId();
         return ResponseEntity.ok(appointmentService.getListAllReportFromParent(parentId));
     }
 
     @GetMapping("/get-report-of-one-student-form-parent")
-    public ResponseEntity<List<ReportAppointmentRes>> getReportOfStudentFormParent(@AuthenticationPrincipal CustomUserDetails userDetails,
+    public ResponseEntity<List<ReportAppointmentRes>> getReportOfStudentFormParent(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
                                                                                    @RequestParam Long studentId) {
         Long parentId = userDetails.getUserId();
         return ResponseEntity.ok(appointmentService.getReportOfOneStudentFromParent(parentId, studentId));
