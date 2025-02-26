@@ -3,6 +3,7 @@ package com.be.custom.api.appointment_api;
 import com.be.base.dto.ServerResponse;
 import com.be.custom.common.security.CustomUserDetails;
 import com.be.custom.dto.request.SaveAppointmentDto;
+import com.be.custom.dto.response_api.ReportAppointmentRes;
 import com.be.custom.entity.AppointmentEntity;
 import com.be.custom.service.appointment.AppointmentService;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +56,25 @@ public class AppointmentApi {
                                                                                         @RequestParam Long studentId) {
         List<Long> listStudentId = Collections.singletonList(studentId);
         return ResponseEntity.ok(appointmentService.getHistoryBooking(listStudentId));
+    }
+
+    @GetMapping("/get-report-form-student")
+    public ResponseEntity<List<ReportAppointmentRes>> getReportFormStudent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long studentId = userDetails.getUserId();
+        List<Long> listStudentId = List.of(studentId);
+        return ResponseEntity.ok(appointmentService.getReportAppointment(listStudentId));
+    }
+
+    @GetMapping("/get-all-report-form-parent")
+    public ResponseEntity<List<ReportAppointmentRes>> getAllReportFormParent(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        Long parentId = userDetails.getUserId();
+        return ResponseEntity.ok(appointmentService.getListAllReportFromParent(parentId));
+    }
+
+    @GetMapping("/get-report-of-one-student-form-parent")
+    public ResponseEntity<List<ReportAppointmentRes>> getReportOfStudentFormParent(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                                                   @RequestParam Long studentId) {
+        Long parentId = userDetails.getUserId();
+        return ResponseEntity.ok(appointmentService.getReportOfOneStudentFromParent(parentId, studentId));
     }
 }

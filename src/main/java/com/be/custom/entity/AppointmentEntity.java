@@ -53,6 +53,8 @@ public class AppointmentEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    private String report;
+
     @Column(nullable = false)
     private Date createdAt = new Date();
 

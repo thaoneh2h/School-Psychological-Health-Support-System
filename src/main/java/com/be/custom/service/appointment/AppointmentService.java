@@ -3,6 +3,7 @@ package com.be.custom.service.appointment;
 import com.be.base.core.BaseService;
 import com.be.base.dto.ServerResponse;
 import com.be.custom.dto.request.SaveAppointmentDto;
+import com.be.custom.dto.response_api.ReportAppointmentRes;
 import com.be.custom.entity.AppointmentEntity;
 import com.be.custom.entity.ProgramRegistrationEntity;
 import com.be.custom.entity.SupportProgramEntity;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -89,5 +91,41 @@ public class AppointmentService extends BaseService<AppointmentEntity, Appointme
     public List<AppointmentEntity> getAllBookingOfStudentFromParent(Long parentId) {
         List<Long> listStudentIdOfParent = userRepository.getListStudentIdOfParent(parentId);
         return getHistoryBooking(listStudentIdOfParent);
+    }
+
+    public List<ReportAppointmentRes> getReportAppointment(List<Long> listStudentId) {
+        List<AppointmentEntity> listAppointmentInDb = repository.getListAppointmentOfStudent(listStudentId);
+        return listAppointmentInDb.stream().map(appointment ->
+                ReportAppointmentRes.builder()
+                        .studentId(appointment.getStudent().getId())
+                        .studentName(appointment.getStudent().getFullName())
+                        .parentId(appointment.getParent().getId())
+                        .parentName(appointment.getParent().getFullName())
+                        .psychologistId(appointment.getPsychologist().getId())
+                        .psychologistName(appointment.getPsychologist().getFullName())
+                        .report(appointment.getReport())
+                        .timeUpload(appointment.getUpdatedAt())
+                        .timeAppointment(appointment.getAppointmentDate())
+                        .build()
+        ).collect(Collectors.toList());
+    }
+
+    public List<ReportAppointmentRes> getListAllReportFromParent(Long parentId) {
+        List<Long> listStudentIdOfParent = userRepository.getListStudentIdOfParent(parentId);
+        if (listStudentIdOfParent.isEmpty()) {
+            return null;
+        }
+
+        return getReportAppointment(listStudentIdOfParent);
+    }
+
+    public List<ReportAppointmentRes> getReportOfOneStudentFromParent(Long parentId, Long studentId) {
+        List<Long> listStudentIdOfParent = userRepository.getListStudentIdOfParent(parentId);
+        if (listStudentIdOfParent.isEmpty() || !listStudentIdOfParent.contains(studentId)) {
+            return null;
+        }
+
+        List<Long> listStudentNeedFind = List.of(studentId);
+        return getReportAppointment(listStudentNeedFind);
     }
 }
