@@ -3,6 +3,7 @@ package com.be.custom.api.survey;
 import com.be.base.dto.ServerResponse;
 import com.be.custom.common.security.CustomUserDetails;
 import com.be.custom.dto.request.SaveAnswerSurveyRequest;
+import com.be.custom.dto.request.SaveSurveyReq;
 import com.be.custom.dto.response_api.DetailAnswerDto;
 import com.be.custom.dto.response_api.QuestionOfSurveyDto;
 import com.be.custom.entity.SurveyEntity;
@@ -63,6 +64,13 @@ public class SurveyApi {
                                                                   @RequestParam Long surveyId) {
         Long studentId = userDetails.getUserId();
         return ResponseEntity.ok(surveyHistoryService.getDetailSurvey(surveyId, studentId));
+    }
+
+    @PostMapping("/save-survey")
+    public ResponseEntity<ServerResponse> saveSurvey(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
+                                                     @RequestBody SaveSurveyReq saveSurveyReq) {
+        Long userId = userDetails.getUserId();
+        return ResponseEntity.ok(surveyService.saveSurvey(saveSurveyReq, userId));
     }
 
 }
