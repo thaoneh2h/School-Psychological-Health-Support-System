@@ -197,4 +197,19 @@ public class SurveyService extends BaseService<SurveyEntity, SurveyRepository> {
 
         }
     }
+
+    @Transactional
+    public ServerResponse changeStatusSurvey(Long userId, Long surveyId) {
+        UserEntity user = userService.findById(userId);
+        if (user == null) {
+            return ServerResponse.error("Not found user change status");
+        }
+        SurveyEntity survey = repository.getById(surveyId);
+        boolean currentStatus = survey.getIsDeleted();
+        survey.setIsDeleted(!currentStatus);
+        survey.setUpdatedBy(user);
+
+        save(survey);
+        return ServerResponse.SUCCESS;
+    }
 }

@@ -6,8 +6,11 @@ import com.be.custom.dto.request.SaveAppointmentDto;
 import com.be.custom.dto.response_api.ReportAppointmentRes;
 import com.be.custom.entity.AppointmentEntity;
 import com.be.custom.service.appointment.AppointmentService;
+import com.be.custom.utils.PageUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -76,5 +79,27 @@ public class AppointmentApi {
                                                                                    @RequestParam Long studentId) {
         Long parentId = userDetails.getUserId();
         return ResponseEntity.ok(appointmentService.getReportOfOneStudentFromParent(parentId, studentId));
+    }
+
+    @GetMapping("/get-page-booking-for-admin")
+    @PreAuthorize("@authorizationService.isSystemAdmin()")
+    public ResponseEntity<?> getPageBookingForAdmin(@RequestParam(defaultValue = "1") int page,
+                                                    @RequestParam(defaultValue = "50") int size,
+                                                    @RequestParam(defaultValue = "createdTime", required = false) String sortField,
+                                                    @RequestParam(defaultValue = "desc") String sortDir,
+                                                    @RequestParam String keywordSearch) {
+        Pageable pageable = PageUtils.from(sortDir, sortField, page, size);
+        return ResponseEntity.ok(appointmentService.getPageAppointment(pageable, keywordSearch));
+    }
+
+    @GetMapping("/get-page-report-for-admin")
+    @PreAuthorize("@authorizationService.isSystemAdmin()")
+    public ResponseEntity<?> getPageReportForAdmin(@RequestParam(defaultValue = "1") int page,
+                                                   @RequestParam(defaultValue = "50") int size,
+                                                   @RequestParam(defaultValue = "createdTime", required = false) String sortField,
+                                                   @RequestParam(defaultValue = "desc") String sortDir,
+                                                   @RequestParam String keywordSearch) {
+        Pageable pageable = PageUtils.from(sortDir, sortField, page, size);
+        return ResponseEntity.ok(appointmentService.getReportAppointment(keywordSearch, pageable));
     }
 }

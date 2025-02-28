@@ -10,9 +10,10 @@ import com.be.custom.repository.UserRepository;
 import com.be.custom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.mail.FetchProfile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -92,5 +93,9 @@ public class SurveyHistoryService extends BaseService<SurveyHistoryEntity, Surve
         }
 
         return listDataAnswer;
+    }
+
+    public Page<SurveyHistoryEntity> getPageSurveyHistory(Pageable pageable, String keyword) {
+        return repository.getPageSurveyHistory(keyword, pageable);
     }
 }

@@ -8,10 +8,11 @@ import com.be.custom.entity.UserEntity;
 import com.be.custom.enums.StatusProgramRegistration;
 import com.be.custom.repository.SupportProgramRegistrationRepository;
 import com.be.custom.repository.SupportProgramRepository;
-import com.be.custom.repository.UserRepository;
 import com.be.custom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,5 +83,24 @@ public class ProgramRegistrationService extends BaseService<ProgramRegistrationE
         save(programRegistrationEntity);
         return true;
     }
+
+    public Page<ProgramRegistrationEntity> getPageProgramRegistration(Pageable pageable, String keyword) {
+        return repository.getPageProgramRegistration(keyword, pageable);
+    }
+
+    @Transactional
+    public ServerResponse updateStatusProgramRegistration(Long programRegistrationId, StatusProgramRegistration status) {
+        ProgramRegistrationEntity programRegistrationEntity = repository.getById(programRegistrationId);
+        programRegistrationEntity.setUpdatedAt(new Date());
+        programRegistrationEntity.setStatus(status);
+
+        save(programRegistrationEntity);
+        return ServerResponse.SUCCESS;
+    }
+
+//    public Page<ProgramRegistrationEntity> getPageProgramRegistrationFromPsychologist(Pageable pageable, String keyword,
+//                                                                                      Long psychologistId) {
+//        return repository.getPageProgramRegistrationFromPsychologist(keyword, pageable);
+//    }
 
 }

@@ -31,12 +31,12 @@ public class PreAuthorizeService {
         return Role.SYSTEM_ADMIN == userDetails.getRole();
     }
 
-    public boolean isCompanyStaff() {
+    public boolean isPsychologist() {
         CustomUserDetails userDetails = userDetailsHolder.getCurrentUser();
         if (userDetails == null) {
             return false;
         }
-        return TypeUser.WEB_ADMIN == userDetails.getTypeUser();
+        return Role.PSYCHOLOGIST == userDetails.getRole();
     }
 
     public boolean isLogin() {

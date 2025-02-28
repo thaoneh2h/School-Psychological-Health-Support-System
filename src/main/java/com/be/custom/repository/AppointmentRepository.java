@@ -2,6 +2,9 @@ package com.be.custom.repository;
 
 import com.be.base.core.BaseRepository;
 import com.be.custom.entity.AppointmentEntity;
+import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
@@ -20,5 +23,10 @@ public interface AppointmentRepository extends BaseRepository<AppointmentEntity>
             "AND a.isDeleted = false")
     Optional<AppointmentEntity> getAppointBetweenTimeInDb(Date startTime, Date endTime);
 
-
+    @Query(value = "SELECT ap FROM AppointmentEntity ap " +
+            "WHERE (:keyword IS NULL OR ap.student.fullName LIKE %:keyword% " +
+            "OR ap.parent.fullName LIKE %:keyword% " +
+            "OR ap.psychologist.fullName LIKE %:keyword%) " +
+            "AND ap.isDeleted = false")
+    Page<AppointmentEntity> getPageSurveyHistory(@Param("keyword") String keyword, Pageable pageable);
 }

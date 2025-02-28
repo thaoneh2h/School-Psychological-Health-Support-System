@@ -5,23 +5,23 @@ import com.be.base.dto.ServerResponse;
 import com.be.custom.dto.request.SaveAppointmentDto;
 import com.be.custom.dto.response_api.ReportAppointmentRes;
 import com.be.custom.entity.AppointmentEntity;
-import com.be.custom.entity.ProgramRegistrationEntity;
-import com.be.custom.entity.SupportProgramEntity;
 import com.be.custom.entity.UserEntity;
 import com.be.custom.enums.StatusBookingAppointment;
-import com.be.custom.enums.StatusProgramRegistration;
 import com.be.custom.repository.AppointmentRepository;
-import com.be.custom.repository.SupportProgramRegistrationRepository;
-import com.be.custom.repository.SupportProgramRepository;
 import com.be.custom.repository.UserRepository;
 import com.be.custom.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,4 +128,26 @@ public class AppointmentService extends BaseService<AppointmentEntity, Appointme
         List<Long> listStudentNeedFind = List.of(studentId);
         return getReportAppointment(listStudentNeedFind);
     }
+
+    public Page<AppointmentEntity> getPageAppointment(Pageable pageable, String keyword) {
+        return repository.getPageSurveyHistory(keyword, pageable);
+    }
+
+    public Page<ReportAppointmentRes> getReportAppointment(String keyword, Pageable pageable) {
+        Page<AppointmentEntity> pageAppointmentInDb = repository.getPageSurveyHistory(keyword, pageable);
+        return pageAppointmentInDb.map(appointment ->
+                ReportAppointmentRes.builder()
+                        .studentId(appointment.getStudent().getId())
+                        .studentName(appointment.getStudent().getFullName())
+                        .parentId(appointment.getParent().getId())
+                        .parentName(appointment.getParent().getFullName())
+                        .psychologistId(appointment.getPsychologist().getId())
+                        .psychologistName(appointment.getPsychologist().getFullName())
+                        .report(appointment.getReport())
+                        .timeUpload(appointment.getUpdatedAt())
+                        .timeAppointment(appointment.getAppointmentDate())
+                        .build()
+        );
+    }
+
 }

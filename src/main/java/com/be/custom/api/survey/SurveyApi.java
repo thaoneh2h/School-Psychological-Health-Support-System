@@ -13,6 +13,7 @@ import com.be.custom.service.survey.SurveyResponseService;
 import com.be.custom.service.survey.SurveyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -67,10 +68,21 @@ public class SurveyApi {
     }
 
     @PostMapping("/save-survey")
+    @PreAuthorize("@authorizationService.isSystemAdmin()")
     public ResponseEntity<ServerResponse> saveSurvey(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
                                                      @RequestBody SaveSurveyReq saveSurveyReq) {
         Long userId = userDetails.getUserId();
         return ResponseEntity.ok(surveyService.saveSurvey(saveSurveyReq, userId));
     }
+
+
+    @PostMapping("/change-status-survey")
+    @PreAuthorize("@authorizationService.isSystemAdmin()")
+    public ResponseEntity<ServerResponse> changeStatusSurvey(@ApiIgnore @AuthenticationPrincipal CustomUserDetails userDetails,
+                                                             @RequestBody Long surveyId) {
+        Long userId = userDetails.getUserId();
+        return ResponseEntity.ok(surveyService.changeStatusSurvey(userId, surveyId));
+    }
+
 
 }
