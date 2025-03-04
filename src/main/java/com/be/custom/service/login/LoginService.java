@@ -46,7 +46,7 @@ public class LoginService {
 
         UserDetailUtils.setUserAuthenticated(user, token);
 
-        LoginResponseDto response = new LoginResponseDto(user.getId(), username, user.getFullName());
+        LoginResponseDto response = new LoginResponseDto(user.getId(), username, user.getFullName(), user.getRole());
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", String.format("access_token=%s;Max-Age=86400;Path=/;", token));
         return ResponseEntity.ok().headers(headers).body(ServerResponse.success(response));

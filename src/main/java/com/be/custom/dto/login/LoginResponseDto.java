@@ -1,5 +1,6 @@
 package com.be.custom.dto.login;
 
+import com.be.custom.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,6 @@ public class LoginResponseDto {
     private Long userId;
     private String username;
     private String name;
+    private Role role;
 
 }
